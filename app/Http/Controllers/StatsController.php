@@ -18,8 +18,9 @@ class StatsController
     public function index(Request $request)
     {
         $user = $this->userService->getUser();
-        dd($user);
+        // dd($user);
         $links = Link::where('user_id', $user->id)->get();
+        // dd(Order::where('code', 'E806TO')->get());
         return $links->map(function (Link $link) {
             $orders = Order::where('code', $link->code)->get();
 

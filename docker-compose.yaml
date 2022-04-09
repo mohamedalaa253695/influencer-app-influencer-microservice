@@ -11,7 +11,7 @@ services:
       REDIS_HOST: redis
     command: "php artisan serve --host=0.0.0.0"
     volumes:
-      - .:/app
+      - .:/home
     ports:
       - 8003:8000
     depends_on:
@@ -22,7 +22,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: "php artisan queue:work"
+    command: "php artisan rabbitmq:consume"
+    restart: unless-stopped
     environment:
       DB_HOST: influencer_db
       DB_DATABASE: influencer
@@ -44,4 +45,4 @@ services:
   redis:
     image: redis:latest
     ports:
-      - 6376:6379
+      - 6379:6379

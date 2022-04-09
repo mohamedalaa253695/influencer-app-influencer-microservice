@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use influencerMicroservices\UserService;
+use InfluencerMicroservices\UserService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
@@ -15,13 +15,13 @@ class OrderCompleted implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $orderData ;
-    public $orderItemsData ;
+    private $orderData ;
+    private $orderItemsData ;
+    private $data;
 
-    public function __construct($orderData, $orderItemsData)
+    public function __construct($data)
     {
-        $this->orderData = $orderData;
-        $this->orderItemsData = $orderItemsData;
+        $this->data = $data;
     }
 
     /**
@@ -31,6 +31,9 @@ class OrderCompleted implements ShouldQueue
      */
     public function handle()
     {
+        $this->orderData = $this->data[0];
+        $this->orderItemsData = $this->data[1];
+        // print_r($this->orderData);
         $order = Order::create([
             'id' => $this->orderData['id'],
             'code' => $this->orderData['code'],

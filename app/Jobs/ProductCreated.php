@@ -13,7 +13,7 @@ class ProductCreated implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $data;
+    private $data;
 
     public function __construct($data)
     {
@@ -27,6 +27,7 @@ class ProductCreated implements ShouldQueue
      */
     public function handle()
     {
+        print_r($this->data);
         Product::create($this->data);
         Cache::forget('products');
     }

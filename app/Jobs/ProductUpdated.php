@@ -13,7 +13,7 @@ class ProductUpdated implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $data;
+    private $data;
 
     public function __construct($data)
     {
@@ -23,7 +23,7 @@ class ProductUpdated implements ShouldQueue
     public function handle()
     {
         $product = Product::find($this->data['id']);
-
+        // print_r($this->data);
         $product->update($this->data);
 
         Cache::forget('products');

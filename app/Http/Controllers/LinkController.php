@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Link;
+use App\Jobs\PingJob;
 use App\Jobs\LinkCreated;
 use App\Models\LinkProduct;
 use Illuminate\Support\Str;
@@ -20,10 +21,11 @@ class LinkController
 
     public function store(Request $request)
     {
+        // dd($request);
         $user = $this->userService->getUser();
 
         $link = Link::create([
-            'user_id' => $request->user('api')->id,
+            'user_id' => $user->id,
             'code' => Str::random(6)
         ]);
         $linkProducts = [];
@@ -35,7 +37,10 @@ class LinkController
             ]);
             $linkProducts[] = $linkProduct->toArray();
         }
-        LinkCreated::dispatch($link, $linkProducts)->onQueue('checkout_queue');
+        // dd($linkProducts);
+        LinkCreated::dispatch([$link->toArray(), $linkProducts])->onQueue('checkout_queue');
+        // PingJob::dispatch([$link->toArray(), $linkProducts])->onQueue('checkout_queue');
+
         return new LinkResource($link);
     }
 }

@@ -22,6 +22,6 @@ class Order extends Model
 
     public function getTotalAttribute()
     {
-        return $this->orderItems->sum(fn (OrderItem $item) => $item->influencer_revenue);
+        return $this->orderItems->sum(fn (OrderItem $item) => $item->revenue);
     }
 }

@@ -13,7 +13,7 @@ class ProductDeleted implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $data;
+    private $data;
 
     public function __construct($data)
     {
@@ -22,7 +22,8 @@ class ProductDeleted implements ShouldQueue
 
     public function handle()
     {
-        Product::destroy($this->data['id']);
+        // var_dump($this->data);
+        Product::destroy($this->data);
         Cache::forget('products');
     }
 }
